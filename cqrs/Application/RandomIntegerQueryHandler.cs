@@ -6,11 +6,10 @@ namespace Cqrs.Application;
 
 public class RandomIntegerQueryHandler : QueryHandler<RandomIntegerQuery, RandomIntegerQueryResult>
 {
-    protected override Task<RandomIntegerQueryResult> HandleAsync(RandomIntegerQuery query)
+    protected override ValueTask<RandomIntegerQueryResult> HandleAsync(RandomIntegerQuery query)
     {
         var rand = new Random();
-        return ValueTask.FromResult(new RandomIntegerQueryResult(rand.Next(query.Min, query.Max)))
-            .AsTask();
+        return ValueTask.FromResult(new RandomIntegerQueryResult(rand.Next(query.Min, query.Max)));
     }
 
     protected override RandomIntegerQueryResult Handle(RandomIntegerQuery query)

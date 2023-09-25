@@ -16,6 +16,6 @@ public interface IHandler
     public TResult Handle<TResult>(IQuery<TResult> query)
         where TResult : IResult;
 
-    public Task<TResult> HandleAsync<TResult>(IQuery<TResult> query)
+    public ValueTask<TResult> HandleAsync<TResult>(IQuery<TResult> query)
         where TResult : IResult;
 }

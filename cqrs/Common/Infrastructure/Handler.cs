@@ -33,7 +33,7 @@ public class Handler : IHandler
         return handler.Handle(query);
     }
 
-    public Task<TResult> HandleAsync<TResult>(IQuery<TResult> query)
+    public ValueTask<TResult> HandleAsync<TResult>(IQuery<TResult> query)
         where TResult : IResult
     {
         var handler = this._serviceProvider.GetService<IQueryHandler<TResult>>();
