@@ -1,0 +1,41 @@
+﻿@page "/"
+@using Cqrs.Application
+@using Cqrs.Common.Application
+@inject IHandlerCreator HandlerCreator
+
+<PageTitle>Index</PageTitle>
+
+<h1>Hello, world!</h1>
+
+Welcome to your new app.
+
+<SurveyPrompt Title="How is Blazor working for you?"/>
+
+<div>@value</div>
+
+<button @onclick="RunCommand">Generate random numbers</button>
+
+<button @onclick="RunQuery">Generate random numbers</button>
+
+@code {
+    private int value;
+
+    private async void RunCommand()
+    {
+        var command = new GenerateRandomIntegersCommand(10);
+        var handler = this.HandlerCreator.Create(command);
+        await foreach (var @event in handler.HandleAsync(command))
+        {
+            this.value = @event.Value;
+            base.StateHasChanged();
+        }
+    }
+
+    private void RunQuery()
+    {
+        var query = new RandomIntegerQuery(-50, 50);
+        var handler = this.HandlerCreator.Create(query);
+        var result = handler.Handle(query);
+        this.value = result.Value;
+    }
+}
