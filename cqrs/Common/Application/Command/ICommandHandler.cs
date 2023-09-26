@@ -5,23 +5,31 @@ namespace Cqrs.Common.Application.Command;
 public interface ICommandHandler<TEvent>
     where TEvent : IEvent
 {
-    IAsyncEnumerable<TEvent> HandleAsync(ICommand<TEvent> command);
+    IAsyncEnumerable<TEvent> HandleAsync(IEventBus eventBus, ICommand<TEvent> command);
 
-    IEnumerable<TEvent> Handle(ICommand<TEvent> command);
+    IEnumerable<TEvent> Handle(IEventBus eventBus, ICommand<TEvent> command);
 }
 
 public abstract class CommandHandler<TCommand, TEvent> : ICommandHandler<TEvent>
-    where TCommand : ICommand<TEvent>
+    where TCommand : class, ICommand<TEvent>
     where TEvent : IEvent
 {
-    public IAsyncEnumerable<TEvent> HandleAsync(ICommand<TEvent> command)
+    public async IAsyncEnumerable<TEvent> HandleAsync(IEventBus eventBus, ICommand<TEvent> command)
     {
-        return this.HandleAsync((TCommand)command);
+        await foreach (var @event in this.HandleAsync((TCommand)command))
+        {
+            eventBus.Push(@event);
+            yield return @event;
+        }
     }
 
-    public IEnumerable<TEvent> Handle(ICommand<TEvent> command)
+    public IEnumerable<TEvent> Handle(IEventBus @eventBus, ICommand<TEvent> command)
     {
-        return this.Handle((TCommand)command);
+        foreach (var @event in this.Handle((TCommand)command))
+        {
+            eventBus.Push(@event);
+            yield return @event;
+        }
     }
 
     protected abstract IAsyncEnumerable<TEvent> HandleAsync(TCommand command);

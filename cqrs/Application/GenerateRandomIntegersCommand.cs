@@ -2,5 +2,5 @@ using Cqrs.Common.Application.Command;
 
 namespace Cqrs.Application;
 
-public record struct GenerateRandomIntegersCommand(int Count)
+public record GenerateRandomIntegersCommand(int Count)
     : ICommand<RandomIntegerGenerated>;

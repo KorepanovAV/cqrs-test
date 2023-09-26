@@ -11,7 +11,7 @@ public interface IQueryHandler<TResult>
 }
 
 public abstract class QueryHandler<TQuery, TResult> : IQueryHandler<TResult>
-    where TQuery : IQuery<TResult>
+    where TQuery : class, IQuery<TResult>
     where TResult : IResult
 {
     public ValueTask<TResult> HandleAsync(IQuery<TResult> query)

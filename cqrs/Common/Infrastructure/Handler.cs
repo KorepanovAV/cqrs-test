@@ -11,19 +11,20 @@ namespace Cqrs.Common.Infrastructure;
 public class Handler : IHandler
 {
     private readonly IServiceProvider _serviceProvider;
+    private readonly IEventBus eventBus;
 
     public IEnumerable<TEvent> Handle<TEvent>(ICommand<TEvent> command)
         where TEvent : IEvent
     {
         var handler = this._serviceProvider.GetService<ICommandHandler<TEvent>>();
-        return handler.Handle(command);
+        return handler.Handle(this.eventBus, command);
     }
 
     public IAsyncEnumerable<TEvent> HandleAsync<TEvent>(ICommand<TEvent> command)
         where TEvent : IEvent
     {
         var handler = this._serviceProvider.GetService<ICommandHandler<TEvent>>();
-        return handler.HandleAsync(command);
+        return handler.HandleAsync(this.eventBus, command);
     }
 
     public TResult Handle<TResult>(IQuery<TResult> query)
@@ -43,5 +44,6 @@ public class Handler : IHandler
     public Handler(IServiceProvider provider)
     {
         this._serviceProvider = provider;
+        this.eventBus = provider.GetService<IEventBus>();
     }
 }

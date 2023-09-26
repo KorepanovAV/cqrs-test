@@ -13,6 +13,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
 builder.Services.AddSingleton<IHandler, Handler>();
+builder.Services.AddSingleton<IEventBus, EventBus>();
 builder.Services.RegisterHandlers();
 
 var app = builder.Build();
