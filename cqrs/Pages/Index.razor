@@ -1,7 +1,7 @@
 ﻿@page "/"
 @using Cqrs.Application
 @using Cqrs.Common.Application
-@inject IHandler Handler
+@inject ICommandQueryDispatcher Dispatcher
 
 <PageTitle>Index</PageTitle>
 
@@ -22,8 +22,8 @@ Welcome to your new app.
 
     private async void RunCommand()
     {
-        var command = new GenerateRandomIntegersCommand(10);
-        await foreach (var @event in this.Handler.HandleAsync(command))
+        var command = new GenerateRandomIntegersCommand(10, "");
+        await foreach (var @event in this.Dispatcher.HandleAsync(command))
         {
             this.value = @event.Value;
             base.StateHasChanged();
@@ -32,8 +32,8 @@ Welcome to your new app.
 
     private void RunQuery()
     {
-        var query = new RandomIntegerQuery(-50, 50);
-        var result = this.Handler.Handle(query);
+        var query = new RandomIntegerQuery(-50, 50, "");
+        var result = this.Dispatcher.Handle(query);
         this.value = result.Value;
     }
 }

@@ -2,5 +2,5 @@ using Cqrs.Common.Application.Query;
 
 namespace Cqrs.Application;
 
-public record RandomIntegerQuery(int Min, int Max)
+public record RandomIntegerQuery(int Min, int Max, string DevelopmentId)
     : IQuery<RandomIntegerQueryResult>;

@@ -1,6 +1,4 @@
 using Cqrs;
-using Cqrs.Common.Application;
-using Cqrs.Common.Infrastructure;
 using Cqrs.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,9 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
-builder.Services.AddSingleton<IHandler, Handler>();
-builder.Services.AddSingleton<IEventBus, EventBus>();
-builder.Services.RegisterHandlers();
+builder.Services.RegisterDevelopment();
 
 var app = builder.Build();
 

@@ -5,7 +5,7 @@ using Cqrs.Common.Application.Query;
 
 namespace Cqrs.Common.Application;
 
-public interface IHandler
+public interface ICommandQueryDispatcher
 {
     public IEnumerable<TEvent> Handle<TEvent>(ICommand<TEvent> command)
         where TEvent : IEvent;
