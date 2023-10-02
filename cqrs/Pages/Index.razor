@@ -17,6 +17,10 @@ Welcome to your new app.
 
 <button @onclick="RunQuery">Generate single random number</button>
 
+<button @onclick=@(() => GetValueFromScope("scope 1"))>Get value from scope 1</button>
+
+<button @onclick=@(() => GetValueFromScope("scope 2"))>Get value from scope 2</button>
+
 @code {
     private int value;
 
@@ -33,6 +37,13 @@ Welcome to your new app.
     private void RunQuery()
     {
         var query = new RandomIntegerQuery(-50, 50, "");
+        var result = this.Dispatcher.Handle(query);
+        this.value = result.Value;
+    }
+
+    private void GetValueFromScope(string scope)
+    {
+        var query = new MemoizedRandomIntegerQuery(scope);
         var result = this.Dispatcher.Handle(query);
         this.value = result.Value;
     }

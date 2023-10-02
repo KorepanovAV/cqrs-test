@@ -11,22 +11,37 @@ public static class ServiceCollectionExtensions
 {
     public static void RegisterDevelopment(this IServiceCollection serviceCollection)
     {
-        serviceCollection.RegisterDispatcher();
-        serviceCollection.RegisterHandlers();
+        serviceCollection
+            .RegisterDispatcher()
+            .RegisterHandlers()
+            .RegisterDevelopmentState();
     }
 
-    private static void RegisterHandlers(this IServiceCollection serviceCollection)
+    private static IServiceCollection RegisterHandlers(this IServiceCollection serviceCollection)
     {
         serviceCollection
             .AddTransient<ICommandHandler<RandomIntegerGenerated>, GenerateRandomIntegersCommandHandler>()
-            .AddTransient<IQueryHandler<RandomIntegerQueryResult>, RandomIntegerQueryHandler>();
+            .AddTransient<IQueryHandler<RandomIntegerQueryResult>, RandomIntegerQueryHandler>()
+            .AddTransient<IQueryHandler<MemoizedRandomIntergerQueryResult>, MemoizedRandomIntegerQueryHandler>();
+
+        return serviceCollection;
     }
 
-    private static void RegisterDispatcher(this IServiceCollection serviceCollection)
+    private static IServiceCollection RegisterDispatcher(this IServiceCollection serviceCollection)
     {
         serviceCollection
             .AddSingleton<ICommandQueryDispatcher, CommandQueryDispatcher>()
             .AddSingleton<IEventBus, EventBus>()
             .AddSingleton<DevelopmentScopeProvider>();
+
+        return serviceCollection;
+    }
+
+    private static IServiceCollection RegisterDevelopmentState(this IServiceCollection serviceCollection)
+    {
+        serviceCollection
+            .AddScoped<State>();
+
+        return serviceCollection;
     }
 }
